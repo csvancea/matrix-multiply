@@ -1,8 +1,6 @@
 # Executables
 
-tema2_blas
-tema2_neopt
-tema2_opt_m
+tema2_*
 compare
 
 # Tests
