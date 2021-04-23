@@ -10,11 +10,14 @@
 }
 
 double* my_solver(int N, double *A, double* B) {
-	double *C = NULL, *BBt = NULL, *ABBt = NULL;
-	int i, j, k;
+	double *C = NULL, *At = NULL, *BBt = NULL, *ABBt = NULL;
+	register int i, j, k;
 
 	C = malloc(sizeof(double) * N * N);
 	SAFE_ASSERT(C == NULL, "Failed calloc: C");
+
+	At = calloc(sizeof(double), N * N);
+	SAFE_ASSERT(At == NULL, "Failed calloc: At");
 
 	BBt = malloc(sizeof(double) * N * N);
 	SAFE_ASSERT(BBt == NULL, "Failed calloc: BBt");
@@ -25,15 +28,31 @@ double* my_solver(int N, double *A, double* B) {
 	double *orig_pa;
 	double *orig_pb;
 	double *orig_pc;
-	double *pa;
-	double *pb;
-	double *pc;
+	register double *pa;
+	register double *pb;
+	register double *pc;
+
+	orig_pa = A;
+	orig_pc = At;
+	for (i = 0; i < N; ++i) {
+		pa = orig_pa;
+		pc = orig_pc;
+		for (j = i; j < N; ++j) {
+			*pc = *pa;
+			pa++;
+			pc += N;
+		}
+		orig_pa += N + 1;
+		orig_pc += N + 1;
+	}
 
 	/* C = A' x A */
+	/* sau nu mai tin cont de L-U si modific ordinea for-urilor */
+
 	pc = C;
-	orig_pa = A;
+	orig_pb = At;
 	for (i = 0; i < N; ++i) {
-		orig_pb = A;
+		orig_pa = A;
 		for (j = 0; j < N; ++j) {
 			register double sum = 0.0;
 			register int limit;
@@ -41,21 +60,21 @@ double* my_solver(int N, double *A, double* B) {
 				limit = i;
 			else
 				limit = j;
-			
-			pa = orig_pa;
+
 			pb = orig_pb;
+			pa = orig_pa;
 
 			for (k = 0; k <= limit; ++k) {
-				sum += *pa * *pb;
+				sum += *pb * *pa;
+				pb++;
 				pa += N;
-				pb += N;
 			}
 			*pc = sum;
 			pc++;
-			orig_pb++;
+			orig_pa++;
 		}
-		orig_pa++;
-	}
+		orig_pb += N;
+	}	
 
 	/* BBt = B x B' -- ok */
 	double *pbbt = BBt;
@@ -114,6 +133,7 @@ failure:
 	C = NULL;
 
 cleanup:
+	free(At);
 	free(BBt);
 	free(ABBt);
 	
