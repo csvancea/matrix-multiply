@@ -1,0 +1,11 @@
+# Executables
+
+tema2_blas
+tema2_neopt
+tema2_opt_m
+compare
+
+# Tests
+
+tests/
+out[1-3]
