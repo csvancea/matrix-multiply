@@ -100,6 +100,7 @@ double* my_solver(int N, double *A, double* B) {
 	 *       - access to At(L) and At(R) is sequential
 	 *   - inequality (!=) instead of less (<) comparisons
 	 *   - replace min() call with inlined code
+	 *   - constants are stored in a register (*pO / sum)
 	 */
 
 	pO = C;
@@ -133,7 +134,8 @@ double* my_solver(int N, double *A, double* B) {
 	 *       - access to BBt(O) is constant;
 	 *       - access to B(L) and B(R) is sequential
 	 *   - inequality (!=) instead of less (<) comparisons
-	 *   - loop unrolling
+	 *   - loop unrolling (N is guaranteed to be a multiple of 40)
+	 *   - constants are stored in a register (*pO / sum)
 	 */
 
 	pO = BBt;
@@ -171,7 +173,8 @@ double* my_solver(int N, double *A, double* B) {
 	 *       - access to A(L) is constant;
 	 *       - access to BBt(R) and ABBt(O) is sequential
 	 *   - inequality (!=) instead of less (<) comparisons
-	 *   - loop unrolling
+	 *   - loop unrolling (N is guaranteed to be a multiple of 40)
+	 *   - constants are stored in a register (*pL / sum)
 	 */
 
 	pBaseL = A;
@@ -182,9 +185,8 @@ double* my_solver(int N, double *A, double* B) {
 		pR = pBaseR;
 		for (k = i; k != N; ++k) {
 			pO = pBaseO;
+			sum = *pL;
 			for (j = 0; j != N; j += 8) {
-				sum = *pL;
-
 				*pO++ += sum * *pR++;
 				*pO++ += sum * *pR++;
 				*pO++ += sum * *pR++;
@@ -211,7 +213,7 @@ double* my_solver(int N, double *A, double* B) {
 	 *   - full memory access optimization:
 	 *       - access to C(O) and ABBt(L) is sequential
 	 *   - inequality (!=) instead of less (<) comparisons
-	 *   - loop unrolling
+	 *   - loop unrolling (N is guaranteed to be a multiple of 40)
 	 */
 
 	pO = C;
