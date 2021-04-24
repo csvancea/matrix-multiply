@@ -38,7 +38,7 @@ double* my_solver(int N, double *A, double* B) {
 
 
 	/* Matrices that need to be zeroed are alloc'd with calloc */
-	C = calloc(sizeof(double), N * N);
+	C = malloc(sizeof(double) * N * N);
 	SAFE_ASSERT(C == NULL, "Failed calloc: C");
 
 	At = calloc(sizeof(double), N * N);
