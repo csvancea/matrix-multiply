@@ -72,8 +72,7 @@ double* my_solver(int N, double *A, double* B) {
 		pO = pBaseO;
 		pL = pBaseL;
 		for (j = i; j != N; ++j) {
-			*pO = *pL;
-			pL++;
+			*pO = *pL++;
 			pO += N;
 		}
 		pBaseO += N + 1;
@@ -111,11 +110,9 @@ double* my_solver(int N, double *A, double* B) {
 		for (k = 0; k <= i; ++k) {
 			pO = pBaseO;
 			for (j = 0; j != N; ++j) {
-				*pO += *pL * *pR;
-				pO++;
-				pR++;
+				*pO++ += *pL * *pR++;
 			}
-			pL++;
+			++pL;
 		}
 		pBaseO += N;
 		pBaseL += N;
@@ -142,12 +139,9 @@ double* my_solver(int N, double *A, double* B) {
 			pL = pBaseL;
 			sum = 0.0;
 			for (k = 0; k != N; ++k) {
-				sum += *pL * *pR;
-				pL++;
-				pR++;
+				sum += *pL++ * *pR++;
 			}
-			*pO = sum;
-			pO++;
+			*pO++ = sum;
 		}
 		pBaseL += N;
 	}
@@ -174,11 +168,9 @@ double* my_solver(int N, double *A, double* B) {
 		for (k = i; k != N; ++k) {
 			pO = pBaseO;
 			for (j = 0; j != N; ++j) {
-				*pO += *pL * *pR;
-				pR++;
-				pO++;
+				*pO++ += *pL * *pR++;
 			}
-			pL++;
+			++pL;
 		}
 		pBaseL += N + 1;
 		pBaseR += N;
