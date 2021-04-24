@@ -17,8 +17,8 @@ double* my_solver(int N, double *A, double* B) {
 	double *C = NULL, *AtA = NULL, *BBt = NULL, *ABBt = NULL;
 	int i, j, k;
 
-	C = calloc(sizeof(double), N * N);
-	SAFE_ASSERT(C == NULL, "Failed calloc: C");
+	C = malloc(sizeof(double) * N * N);
+	SAFE_ASSERT(C == NULL, "Failed malloc: C");
 
 	AtA = calloc(sizeof(double), N * N);
 	SAFE_ASSERT(AtA == NULL, "Failed calloc: AtA");
