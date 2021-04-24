@@ -30,6 +30,7 @@ double* my_solver(int N, double *A, double* B) {
 	SAFE_ASSERT(ABBt == NULL, "Failed calloc: ABBt");
 
 	/* AtA = A' x A */
+	/* Optimization: skip lower/upper part of A/A' */
 	for (i = 0; i < N; ++i) {
 		for (j = 0; j < N; ++j) {
 			for (k = 0; k <= min(i, j); ++k) {
@@ -48,6 +49,7 @@ double* my_solver(int N, double *A, double* B) {
 	}
 
 	/* ABBt = A x (B x B') */
+	/* Optimization: skip lower part of A */
 	for (i = 0; i < N; ++i) {
 		for (j = 0; j < N; ++j) {
 			for (k = i; k < N; ++k) {

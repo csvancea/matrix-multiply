@@ -99,6 +99,7 @@ double* my_solver(int N, double *A, double* B) {
 	 *       - access to C(O) is constant;
 	 *       - access to At(L) and At(R) is sequential
 	 *   - inequality (!=) instead of less (<) comparisons
+	 *   - replace min() call with inlined code
 	 */
 
 	pO = C;
