@@ -9,6 +9,8 @@
 	goto failure;			\
 }
 
+#define REPEAT_8_TIMES(expr) expr expr expr expr expr expr expr expr
+
 double* my_solver(int N, double *A, double* B) {
 	/* Base matrices aren't stored in registers since they are rarely referenced */
 	double *C = NULL, *At = NULL, *BBt = NULL, *ABBt = NULL;
@@ -147,14 +149,7 @@ double* my_solver(int N, double *A, double* B) {
 			pL = pBaseL;
 			sum = 0.0;
 			for (k = 0; k != N; k += 8) {
-				sum += *pL++ * *pR++;
-				sum += *pL++ * *pR++;
-				sum += *pL++ * *pR++;
-				sum += *pL++ * *pR++;
-				sum += *pL++ * *pR++;
-				sum += *pL++ * *pR++;
-				sum += *pL++ * *pR++;
-				sum += *pL++ * *pR++;
+				REPEAT_8_TIMES(sum += *pL++ * *pR++;)
 			}
 			*pO = sum;
 			pO++;
@@ -187,14 +182,7 @@ double* my_solver(int N, double *A, double* B) {
 			pO = pBaseO;
 			sum = *pL;
 			for (j = 0; j != N; j += 8) {
-				*pO++ += sum * *pR++;
-				*pO++ += sum * *pR++;
-				*pO++ += sum * *pR++;
-				*pO++ += sum * *pR++;
-				*pO++ += sum * *pR++;
-				*pO++ += sum * *pR++;
-				*pO++ += sum * *pR++;
-				*pO++ += sum * *pR++;
+				REPEAT_8_TIMES(*pO++ += sum * *pR++;)
 			}
 			pL++;
 		}
@@ -220,14 +208,7 @@ double* my_solver(int N, double *A, double* B) {
 	pL = ABBt;
 	j = N * N;
 	for (i = 0; i != j; i += 8) {
-		*pO++ += *pL++;
-		*pO++ += *pL++;
-		*pO++ += *pL++;
-		*pO++ += *pL++;
-		*pO++ += *pL++;
-		*pO++ += *pL++;
-		*pO++ += *pL++;
-		*pO++ += *pL++;
+		REPEAT_8_TIMES(*pO++ += *pL++;)
 	}
 
 	goto cleanup;
