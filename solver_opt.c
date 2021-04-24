@@ -16,6 +16,9 @@ double* my_solver(int N, double *A, double* B) {
 	/* Declaring indices as registers decreased the execution time */
 	register int i, j, k;
 
+	/* Upper limit for some loops */
+	register int limit;
+
 	/* Partial sum */
 	register double sum;
 
@@ -83,41 +86,39 @@ double* my_solver(int N, double *A, double* B) {
 	/*
 	 * Calculation: C = A' x A
 	 * Naive: C[i][j] += At[i][k] * A[k][j]
-	 *
-	 * Two main mutually-exclusive optimizations can be applied here:
-	 * 1. it is known that At = lower-triangular and A = upper-triangular
-	 *    so we could skip a lot of scalar multiplications by limiting k range:
-	 *      k = [0 .. min(i, j)]
-	 *    however this means that k depends on both i and j, so swapping for's
-	 *    order for better cache optimizations is not possible anymore
-	 * 2. optimize memory accesses, however there will be some redundant products
-	 *     (after some tests, I sticked with this approach)
+	 * Better: Rewrite C = A' x A = A' x (A')' = At x At'
+	 * New code: C[i][j] += At[i][k] * At[j][k] (looks very cache-friendly)
 	 *
 	 * Optimizations:
-	 *   - skip upper part of At since At is lower-triangular
+	 *   - skip:
+	 *     - upper part of At since At is lower-triangular
+	 *     - lower part of A=At' since A is upper-triangular
+	 *     - So k = [0 .. min(i, j)]
 	 *   - pointer arithmetic
 	 *   - full memory access optimization:
-	 *       - access to At(L) is constant;
-	 *       - access to A(R) and C(O) is sequential
+	 *       - access to C(O) is constant;
+	 *       - access to At(L) and At(R) is sequential
 	 *   - inequality (!=) instead of less (<) comparisons
 	 */
 
-	pBaseO = C;
+	pO = C;
 	pBaseL = At;
-	pBaseR = A;
+	pBaseR = At;
 	for (i = 0; i != N; ++i) {
-		pL = pBaseL;
 		pR = pBaseR;
-		for (k = 0; k <= i; ++k) {
-			pO = pBaseO;
-			for (j = 0; j != N; ++j) {
-				*pO += *pL * *pR;
-				pO++;
+		for (j = 0; j != N; ++j) {
+			limit = 1 + (i < j ? i : j);
+			pL = pBaseL;
+			sum = 0.0;
+			for (k = 0; k != limit; ++k) {
+				sum += *pL * *pR;
+				pL++;
 				pR++;
 			}
-			pL++;
+			*pO = sum;
+			pO++;
+			pR += N - limit;
 		}
-		pBaseO += N;
 		pBaseL += N;
 	}
 
