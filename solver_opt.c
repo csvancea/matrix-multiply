@@ -52,7 +52,7 @@ double* my_solver(int N, double *A, double* B) {
 	 * Calculation: At = A'
 	 * Why: later on I have to compute C = A' x A.
 	 *      if done naively, this compuation roughly translates to:
-	 *        C[i][j] = A[k][i] * A[k][j] (as seen in the unoptimized solution)
+	 *        C[i][j] += A[k][i] * A[k][j] (as seen in the unoptimized solution)
 	 *      obviously this is bad because both accesses to A are non-sequential
 	 * Solution: precompute A' and make better use of cache and the form of A'
 	 *
@@ -81,7 +81,7 @@ double* my_solver(int N, double *A, double* B) {
 
 	/*
 	 * Calculation: C = A' x A
-	 * Naive: C[i][j] = At[i][k] * A[k][j]
+	 * Naive: C[i][j] += At[i][k] * A[k][j]
 	 *
 	 * Two main mutually-exclusive optimizations can be applied here:
 	 * 1. it is known that At = lower-triangular and A = upper-triangular
@@ -120,7 +120,7 @@ double* my_solver(int N, double *A, double* B) {
 
 	/*
 	 * Calculation: BBt = B x B'
-	 * Naive: BBt[i][j] = B[i][k] * B[j][k] (naive approach is pretty good already :) )
+	 * Naive: BBt[i][j] += B[i][k] * B[j][k] (naive approach is pretty good already :) )
 	 *
 	 * Optimizations:
 	 *   - pointer arithmetic
@@ -148,7 +148,7 @@ double* my_solver(int N, double *A, double* B) {
 
 	/*
 	 * Calculation: ABBt = A x (B x B')
-	 * Naive: ABBt[i][j] = A[i][k] * BBt[k][j]
+	 * Naive: ABBt[i][j] += A[i][k] * BBt[k][j]
 	 *
 	 * Optimizations:
 	 *   - skip lower part of A since A is upper-triangular
