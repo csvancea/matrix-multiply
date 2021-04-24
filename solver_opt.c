@@ -34,10 +34,10 @@ double* my_solver(int N, double *A, double* B) {
 
 	orig_pa = A;
 	orig_pc = At;
-	for (i = 0; i < N; ++i) {
+	for (i = 0; i != N; ++i) {
 		pa = orig_pa;
 		pc = orig_pc;
-		for (j = i; j < N; ++j) {
+		for (j = i; j != N; ++j) {
 			*pc = *pa;
 			pa++;
 			pc += N;
@@ -49,12 +49,12 @@ double* my_solver(int N, double *A, double* B) {
 	/* C = A' x A */
 	orig_pc = C;
 	orig_pa = At;
-	for (i = 0; i < N; ++i) {
+	for (i = 0; i != N; ++i) {
 		pa = orig_pa;
 		pb = A;
 		for (k = 0; k <= i; ++k) {
 			pc = orig_pc;
-			for (j = 0; j < N; ++j) {
+			for (j = 0; j != N; ++j) {
 				*pc += *pa * *pb;
 				pc++;
 				pb++;
@@ -69,12 +69,12 @@ double* my_solver(int N, double *A, double* B) {
 	/* BBt = B x B' -- ok */
 	pc = BBt;
 	orig_pa = B;
-	for (i = 0; i < N; ++i) {
+	for (i = 0; i != N; ++i) {
 		pb = &B[0];
-		for (j = 0; j < N; ++j) {
+		for (j = 0; j != N; ++j) {
 			pa = orig_pa;
 			register double sum = 0.0;
-			for (k = 0; k < N; ++k) {
+			for (k = 0; k != N; ++k) {
 				sum += *pa * *pb;
 				pa++;
 				pb++;
@@ -89,12 +89,12 @@ double* my_solver(int N, double *A, double* B) {
 	orig_pa = A;
 	orig_pb = BBt;
 	orig_pc = ABBt;
-	for (i = 0; i < N; ++i) {
+	for (i = 0; i != N; ++i) {
 		pa = orig_pa;
 		pb = orig_pb;
-		for (k = i; k < N; ++k) {
+		for (k = i; k != N; ++k) {
 			pc = orig_pc;
-			for (j = 0; j < N; ++j) {
+			for (j = 0; j != N; ++j) {
 				*pc += *pa * *pb;
 				pb++;
 				pc++;
@@ -112,7 +112,7 @@ double* my_solver(int N, double *A, double* B) {
 	register int limit = N*N;
 	pc = C;
 	pa = ABBt;
-	for (i = 0; i < limit; ++i) {
+	for (i = 0; i != limit; ++i) {
 		*pc++ += *pa++;
 	}
 
