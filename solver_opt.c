@@ -132,6 +132,7 @@ double* my_solver(int N, double *A, double* B) {
 	 *       - access to BBt(O) is constant;
 	 *       - access to B(L) and B(R) is sequential
 	 *   - inequality (!=) instead of less (<) comparisons
+	 *   - loop unrolling
 	 */
 
 	pO = BBt;
@@ -142,10 +143,15 @@ double* my_solver(int N, double *A, double* B) {
 		for (j = 0; j != N; ++j) {
 			pL = pBaseL;
 			sum = 0.0;
-			for (k = 0; k != N; ++k) {
-				sum += *pL * *pR;
-				pL++;
-				pR++;
+			for (k = 0; k != N; k += 8) {
+				sum += *pL++ * *pR++;
+				sum += *pL++ * *pR++;
+				sum += *pL++ * *pR++;
+				sum += *pL++ * *pR++;
+				sum += *pL++ * *pR++;
+				sum += *pL++ * *pR++;
+				sum += *pL++ * *pR++;
+				sum += *pL++ * *pR++;
 			}
 			*pO = sum;
 			pO++;
@@ -164,6 +170,7 @@ double* my_solver(int N, double *A, double* B) {
 	 *       - access to A(L) is constant;
 	 *       - access to BBt(R) and ABBt(O) is sequential
 	 *   - inequality (!=) instead of less (<) comparisons
+	 *   - loop unrolling
 	 */
 
 	pBaseL = A;
@@ -174,10 +181,17 @@ double* my_solver(int N, double *A, double* B) {
 		pR = pBaseR;
 		for (k = i; k != N; ++k) {
 			pO = pBaseO;
-			for (j = 0; j != N; ++j) {
-				*pO += *pL * *pR;
-				pR++;
-				pO++;
+			for (j = 0; j != N; j += 8) {
+				sum = *pL;
+
+				*pO++ += sum * *pR++;
+				*pO++ += sum * *pR++;
+				*pO++ += sum * *pR++;
+				*pO++ += sum * *pR++;
+				*pO++ += sum * *pR++;
+				*pO++ += sum * *pR++;
+				*pO++ += sum * *pR++;
+				*pO++ += sum * *pR++;
 			}
 			pL++;
 		}
@@ -196,12 +210,20 @@ double* my_solver(int N, double *A, double* B) {
 	 *   - full memory access optimization:
 	 *       - access to C(O) and ABBt(L) is sequential
 	 *   - inequality (!=) instead of less (<) comparisons
+	 *   - loop unrolling
 	 */
 
 	pO = C;
 	pL = ABBt;
 	j = N * N;
-	for (i = 0; i != j; ++i) {
+	for (i = 0; i != j; i += 8) {
+		*pO++ += *pL++;
+		*pO++ += *pL++;
+		*pO++ += *pL++;
+		*pO++ += *pL++;
+		*pO++ += *pL++;
+		*pO++ += *pL++;
+		*pO++ += *pL++;
 		*pO++ += *pL++;
 	}
 
