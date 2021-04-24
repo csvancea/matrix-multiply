@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall -Werror -O0 -g
+CFLAGS=-Wall -Werror -O0
 LIBDIRS=-L/usr/lib64/atlas
 LIBS=-lsatlas
 
