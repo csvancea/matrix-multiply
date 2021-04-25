@@ -144,3 +144,31 @@ Run=./tema2_opt_m: N=1200: Time=4.049050 OK
 Run=./tema2_opt_m: N=1400: Time=6.606329
 <<< Bonus=10p >>>
 ```
+
+## Analiză valgrind
+
+Nu există memory leak-uri. Rezultatele rulărilor se află în `valgrind-results/`.
+
+## Analiză cachegrind
+
+Primul lucru care iese în evidență este numărul de instrucțiuni (5.7mld pentru neopt,
+1.2 mld pentru opt_m și doar 200 mil pentru blas). Totuși, numărul de miss-uri în
+cache-ul pentru instrucțiuni este aproape inexistent în toate cele 3 implementări.
+
+Următorul fapt observat este accesul la memorie - opt_m accesează de 10 ori mai
+puține date din memorie față de varianta neoptimizată. Acest salt uriaș poate fi
+datorat optimizării constantelor și folosirii a cât mai multe registre în loc de
+variabile alocate pe stivă.
+
+Deși procentual în cazul implementării optimizate sunt mai multe missuri, acestea
+sunt în valoare absolută cu mult mai puține față de varianta neoptimizată, fapt
+datorat optimizărilor de reordonare a buclelor pentru a avea acces secvențial.
+
+Ultimul lucru observat este numărul de branch-uri mai mic în cazul implementării
+optimizate (loop unrolling).
+
+În urma analizării executabilului blas se observă că acesta exploatează foarte bine
+accesul la memorie, având atât procentual, cât și în valori absolute mult mai puține
+miss-uri, branch-uri și mispredicts față de celelalte 2 implementări.
+
+Rezultatele rulărilor se află în `valgrind-results/`.
