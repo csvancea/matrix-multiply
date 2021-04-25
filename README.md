@@ -23,9 +23,12 @@ Am impărțit calculul în următoarele subcalcule:
 #### Rezultate pe coada ibm.nehalem:
 
 ```
-Run=./tema2_blas: N=400: Time=0.057834  OK
-Run=./tema2_blas: N=800: Time=0.278843  OK
-Run=./tema2_blas: N=1200: Time=0.838009 OK
+Run=./tema2_blas: N=400: Time=0.058871  OK
+Run=./tema2_blas: N=600: Time=0.129748
+Run=./tema2_blas: N=800: Time=0.253782  OK
+Run=./tema2_blas: N=1000: Time=0.489693
+Run=./tema2_blas: N=1200: Time=0.865853 OK
+Run=./tema2_blas: N=1400: Time=1.322491
 ```
 
 ### Varianta neoptimizată
@@ -49,9 +52,12 @@ Am impărțit calculul în următoarele subcalcule:
 #### Rezultate pe coada ibm.nehalem:
 
 ```
-Run=./tema2_neopt: N=400: Time=1.091684   OK
-Run=./tema2_neopt: N=800: Time=8.359577   OK
-Run=./tema2_neopt: N=1200: Time=27.939932 OK
+Run=./tema2_neopt: N=400: Time=1.093540   OK
+Run=./tema2_neopt: N=600: Time=3.547960
+Run=./tema2_neopt: N=800: Time=8.367974   OK
+Run=./tema2_neopt: N=1000: Time=16.104860
+Run=./tema2_neopt: N=1200: Time=28.054720 OK
+Run=./tema2_neopt: N=1400: Time=45.481689
 ```
 
 ### Varianta optimizată
@@ -130,8 +136,11 @@ double *C; // [rsp+38h] [rbp-38h]
 (tbf, testul N=1200 e hit or miss; alternează între ~4.05s și ~4.30s)
 
 ```
-Run=./tema2_opt_m: N=400: Time=0.161066  OK
-Run=./tema2_opt_m: N=800: Time=1.270034  OK
-Run=./tema2_opt_m: N=1200: Time=4.057611 OK
+Run=./tema2_opt_m: N=400: Time=0.161236  OK
+Run=./tema2_opt_m: N=600: Time=0.538191
+Run=./tema2_opt_m: N=800: Time=1.265819  OK
+Run=./tema2_opt_m: N=1000: Time=2.416722
+Run=./tema2_opt_m: N=1200: Time=4.049050 OK
+Run=./tema2_opt_m: N=1400: Time=6.606329
 <<< Bonus=10p >>>
 ```
