@@ -196,7 +196,6 @@ double* my_solver(int N, double *A, double* B) {
 	 * Code: C[i][j] += ABBt[i][j]   (C = A' x A already)
 	 *
 	 * Optimizations:
-	 *   - skip lower part of A since A is upper-triangular
 	 *   - pointer arithmetic
 	 *   - full memory access optimization:
 	 *       - access to C(O) and ABBt(L) is sequential
