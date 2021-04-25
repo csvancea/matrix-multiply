@@ -23,12 +23,15 @@ Am impărțit calculul în următoarele subcalcule:
 #### Rezultate pe coada ibm.nehalem:
 
 ```
-Run=./tema2_blas: N=400: Time=0.058871  OK
-Run=./tema2_blas: N=600: Time=0.129748
-Run=./tema2_blas: N=800: Time=0.253782  OK
-Run=./tema2_blas: N=1000: Time=0.489693
-Run=./tema2_blas: N=1200: Time=0.865853 OK
-Run=./tema2_blas: N=1400: Time=1.322491
+Run=./tema2_blas: N=400: Time=0.058755  OK
+Run=./tema2_blas: N=600: Time=0.131540
+Run=./tema2_blas: N=800: Time=0.292576  OK
+Run=./tema2_blas: N=1000: Time=0.490025
+Run=./tema2_blas: N=1200: Time=0.862272 OK
+Run=./tema2_blas: N=1400: Time=1.327101
+Run=./tema2_blas: N=1600: Time=1.969486
+Run=./tema2_blas: N=1800: Time=2.794288
+Run=./tema2_blas: N=2000: Time=3.809342
 ```
 
 ### Varianta neoptimizată
@@ -52,12 +55,15 @@ Am impărțit calculul în următoarele subcalcule:
 #### Rezultate pe coada ibm.nehalem:
 
 ```
-Run=./tema2_neopt: N=400: Time=1.093540   OK
-Run=./tema2_neopt: N=600: Time=3.547960
-Run=./tema2_neopt: N=800: Time=8.367974   OK
-Run=./tema2_neopt: N=1000: Time=16.104860
-Run=./tema2_neopt: N=1200: Time=28.054720 OK
-Run=./tema2_neopt: N=1400: Time=45.481689
+Run=./tema2_neopt: N=400: Time=1.135183    OK
+Run=./tema2_neopt: N=600: Time=3.470950
+Run=./tema2_neopt: N=800: Time=8.269319    OK
+Run=./tema2_neopt: N=1000: Time=16.031574
+Run=./tema2_neopt: N=1200: Time=27.859262  OK
+Run=./tema2_neopt: N=1400: Time=45.311760
+Run=./tema2_neopt: N=1600: Time=74.682930
+Run=./tema2_neopt: N=1800: Time=103.854233
+Run=./tema2_neopt: N=2000: Time=145.613525
 ```
 
 ### Varianta optimizată
@@ -136,12 +142,15 @@ double *C; // [rsp+38h] [rbp-38h]
 (tbf, testul N=1200 e hit or miss; alternează între ~4.05s și ~4.30s)
 
 ```
-Run=./tema2_opt_m: N=400: Time=0.161236  OK
-Run=./tema2_opt_m: N=600: Time=0.538191
-Run=./tema2_opt_m: N=800: Time=1.265819  OK
-Run=./tema2_opt_m: N=1000: Time=2.416722
-Run=./tema2_opt_m: N=1200: Time=4.049050 OK
-Run=./tema2_opt_m: N=1400: Time=6.606329
+Run=./tema2_opt_m: N=400: Time=0.161150   OK
+Run=./tema2_opt_m: N=600: Time=0.541214
+Run=./tema2_opt_m: N=800: Time=1.270233   OK
+Run=./tema2_opt_m: N=1000: Time=2.413441
+Run=./tema2_opt_m: N=1200: Time=4.055645  OK
+Run=./tema2_opt_m: N=1400: Time=6.650734
+Run=./tema2_opt_m: N=1600: Time=10.012427
+Run=./tema2_opt_m: N=1800: Time=14.430511
+Run=./tema2_opt_m: N=2000: Time=19.866138
 <<< Bonus=10p >>>
 ```
 
@@ -175,3 +184,16 @@ Rezultatele rulărilor se află în `analysis/`.
 
 ## Analiză comparativă
 
+![Grafic](analysis/comparison.png)
+
+În urma analizei timpilor de execuție a celor 3 implementări se observă că pentru
+matrici mici (N < 800), opt_m și blas au timpi apropiați, însă pentru matrici mai
+mari de atât, implementarea cu blas se execută mai rapid (medie: de 5x mai rapid,
+însă conform evoluției graficului estimez că pentru valori N > 2000 această
+diferență între implementări va crește).
+
+Implementarea neoptimizată nu se poate compara nici cu opt_m, nici cu blas (mai ales).
+Spre exemplu, în timpul în care neopt calculează rezultatul pentru o matrice cu N=400,
+blas poate face același calcul cu N=1400, iar această diferență crește pe măsură ce
+N crește. În medie, blas este de 32 de ori mai rapid decât neopt. În raport cu opt_m,
+implementarea neoptimizată este în medie de 7 ori mai lentă.
