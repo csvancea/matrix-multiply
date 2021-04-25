@@ -147,7 +147,7 @@ Run=./tema2_opt_m: N=1400: Time=6.606329
 
 ## Analiză valgrind
 
-Nu există memory leak-uri. Rezultatele rulărilor se află în `valgrind-results/`.
+Nu există memory leak-uri. Rezultatele rulărilor se află în `analysis/`.
 
 ## Analiză cachegrind
 
@@ -171,4 +171,7 @@ optimizate (loop unrolling).
 accesul la memorie, având atât procentual, cât și în valori absolute mult mai puține
 miss-uri, branch-uri și mispredicts față de celelalte 2 implementări.
 
-Rezultatele rulărilor se află în `valgrind-results/`.
+Rezultatele rulărilor se află în `analysis/`.
+
+## Analiză comparativă
+
