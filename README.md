@@ -160,14 +160,15 @@ Nu există memory leak-uri. Rezultatele rulărilor se află în `analysis/`.
 
 ## Analiză cachegrind
 
-Primul lucru care iese în evidență este numărul de instrucțiuni (5.7mld pentru neopt,
-1.2 mld pentru opt_m și doar 200 mil pentru blas). Totuși, numărul de miss-uri în
-cache-ul pentru instrucțiuni este aproape inexistent în toate cele 3 implementări.
+Primul lucru care iese în evidență este numărul de instrucțiuni (5.7mld pentru
+`neopt`, 1.2 mld pentru `opt_m` și doar 200 mil pentru `BLAS`). Totuși, numărul
+de miss-uri în cache-ul pentru instrucțiuni este aproape inexistent în toate
+cele 3 implementări.
 
-Următorul fapt observat este accesul la memorie - opt_m accesează de 10 ori mai
-puține date din memorie față de varianta neoptimizată. Acest salt uriaș poate fi
-datorat optimizării constantelor și folosirii a cât mai multe registre în loc de
-variabile alocate pe stivă.
+Următorul fapt observat este accesul la memorie - `opt_m` accesează de 10 ori
+mai puține date din memorie față de varianta neoptimizată. Acest salt uriaș
+poate fi datorat optimizării constantelor și folosirii a cât mai multe registre
+în loc de variabile alocate pe stivă.
 
 Deși procentual în cazul implementării optimizate sunt mai multe missuri, acestea
 sunt în valoare absolută cu mult mai puține față de varianta neoptimizată, fapt
@@ -176,9 +177,9 @@ datorat optimizărilor de reordonare a buclelor pentru a avea acces secvențial.
 Ultimul lucru observat este numărul de branch-uri mai mic în cazul implementării
 optimizate (loop unrolling).
 
-În urma analizării executabilului blas se observă că acesta exploatează foarte bine
-accesul la memorie, având atât procentual, cât și în valori absolute mult mai puține
-miss-uri, branch-uri și mispredicts față de celelalte 2 implementări.
+În urma analizării executabilului `BLAS` se observă că acesta exploatează foarte
+bine accesul la memorie, având atât procentual, cât și în valori absolute mult
+mai puține miss-uri, branch-uri și mispredicts față de celelalte 2 implementări.
 
 Rezultatele rulărilor se află în `analysis/`.
 
@@ -186,14 +187,15 @@ Rezultatele rulărilor se află în `analysis/`.
 
 ![Grafic](analysis/comparison.png)
 
-În urma analizei timpilor de execuție a celor 3 implementări se observă că pentru
-matrici mici (N < 800), opt_m și blas au timpi apropiați, însă pentru matrici mai
-mari de atât, implementarea cu blas se execută mai rapid (medie: de 5x mai rapid,
-însă conform evoluției graficului estimez că pentru valori N > 2000 această
-diferență între implementări va crește).
+În urma analizei timpilor de execuție a celor 3 implementări se observă că
+pentru matrici mici (N < 800), `opt_m` și `BLAS` au timpi apropiați, însă
+pentru matrici mai mari de atât, implementarea cu `BLAS` se execută mai
+rapid (medie: de 5x mai rapid, însă conform evoluției graficului estimez că
+pentru valori N > 2000 această diferență între implementări va crește).
 
-Implementarea neoptimizată nu se poate compara nici cu opt_m, nici cu blas (mai ales).
-Spre exemplu, în timpul în care neopt calculează rezultatul pentru o matrice cu N=400,
-blas poate face același calcul cu N=1400, iar această diferență crește pe măsură ce
-N crește. În medie, blas este de 32 de ori mai rapid decât neopt. În raport cu opt_m,
-implementarea neoptimizată este în medie de 7 ori mai lentă.
+Implementarea neoptimizată nu se poate compara nici cu `opt_m`, nici cu `BLAS`
+(mai ales). Spre exemplu, în timpul în care neopt calculează rezultatul pentru
+o matrice cu N=400, `BLAS` poate face același calcul cu N=1400, iar această
+diferență crește pe măsură ce N crește. În medie, `BLAS` este de 32 de ori mai
+rapid decât `neopt`. În raport cu `opt_m`, implementarea neoptimizată este în
+medie de 7 ori mai lentă.
